@@ -3,78 +3,70 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# -------------------------------
+# Dashboard Setup
+# -------------------------------
 st.set_page_config(page_title="Medical Insurance Dashboard", layout="wide")
 st.title("🏥 Medical Insurance Cost Analysis Dashboard")
 
-import os
+# Load Data
+DATA_PATH = "clean_data.csv"
+df = pd.read_csv(DATA_PATH)
 
-# Get the directory that this current script is in
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(SCRIPT_DIR, 'clean_data.csv')
+# -------------------------------
+# Sidebar Filters
+# -------------------------------
+st.sidebar.header("🔎 Filters")
+age_range = st.sidebar.slider("Select Age Range", int(df["Age"].min()), int(df["Age"].max()), (20, 60))
+smoker_filter = st.sidebar.multiselect("Smoker Status", options=df["Smoker"].unique(), default=df["Smoker"].unique())
 
-# Load the dataframe safely
-DF = pd.read_csv(DATA_PATH)
+filtered_df = df[(df["Age"].between(age_range[0], age_range[1])) & (df["Smoker"].isin(smoker_filter))]
 
-# Define filtered_df (assuming no filtering yet, will be updated later with user input)
-filtered_df = DF.copy()
-
-
-# First Plot: Age vs. Charges Scatter Plot
+# -------------------------------
+# Objective 1: Age vs Charges
+# -------------------------------
+st.subheader("📊 Objective 1: Age vs. Charges")
 fig1, ax1 = plt.subplots()
-sns.set_style('white')
-sns.scatterplot(x='Age', y='Charges', hue='Smoker', data=filtered_df, ax=ax1)
-plt.title('Age vs. Charges')
+sns.scatterplot(x="Age", y="Charges", hue="Smoker", data=filtered_df, ax=ax1, palette="coolwarm")
+ax1.set_title("Age vs. Charges", fontsize=14)
+ax1.set_xlabel("Age")
+ax1.set_ylabel("Charges")
 st.pyplot(fig1)
-# Second Plot: Count of Smokers vs Non-Smokers by Age Group
-# Ensure age_group is defined on the DataFrame being used for plotting
-DF['age_group'] = pd.cut(DF['Age'], bins=[17, 29, 39, 49, 65], labels=['18-29', '30-39', '40-49', '50-64'])
 
-fig2, ax2 = plt.subplots(figsize=(9, 5)) # Create a new figure for the second plot
-sns.countplot(x='age_group', hue='Smoker', data=DF, palette='Set2', ax=ax2)
-
-plt.title('Count of Smokers vs Non-Smokers by Age Group')
-plt.xlabel('Age Groups')
-plt.ylabel('Number of Beneficiaries')
-st.pyplot(fig2)
-
-st.set_page_config(page_title="Smoker Status by Age Group", layout="wide")
-st.title("🚬 Smoker Status by Age Group Analysis")
-
-# Load the data
-df_streamlit = pd.read_csv("clean_data.csv")
-
-# Define age bins and labels
+# -------------------------------
+# Objective 2: Smokers vs Non-Smokers by Age Group
+# -------------------------------
+st.subheader("🚬 Objective 2: Smoker Status by Age Group")
 age_bins = [18, 30, 40, 50, 60, 70]
 age_labels = ["18-29", "30-39", "40-49", "50-59", "60-69"]
+df["Age Group"] = pd.cut(df["Age"], bins=age_bins, labels=age_labels, right=False)
 
-# Create 'Age Group' column
-df_streamlit["Age Group"] = pd.cut(
-    df_streamlit["Age"], bins=age_bins, labels=age_labels, right=False
-)
+fig2, ax2 = plt.subplots(figsize=(9, 5))
+sns.countplot(x="Age Group", hue="Smoker", data=df, palette={"yes": "red", "no": "blue"}, ax=ax2)
+ax2.set_title("Number of Insured People by Age Group and Smoker Status", fontsize=14)
+ax2.set_xlabel("Age Group")
+ax2.set_ylabel("Count")
+ax2.legend(title="Smoker")
+st.pyplot(fig2)
 
-# Set the style and create the plot
-fig, ax = plt.subplots(figsize=(10, 7)) # Create figure and axes for matplotlib
-sns.set_theme(style="whitegrid")
+# -------------------------------
+# Objective 3: BMI vs Charges
+# -------------------------------
+st.subheader("⚖️ Objective 3: BMI vs. Charges")
+fig3, ax3 = plt.subplots()
+sns.scatterplot(x="BMI", y="Charges", hue="Smoker", data=filtered_df, ax=ax3, palette="Set1")
+ax3.set_title("BMI vs. Charges", fontsize=14)
+ax3.set_xlabel("BMI")
+ax3.set_ylabel("Charges")
+st.pyplot(fig3)
 
-sns.countplot(
-    data=df_streamlit,
-    x="Age Group",
-    hue="Smoker",
-    palette={"yes": "red", "no": "blue"},
-    ax=ax # Pass the axes to seaborn
-)
-
-ax.set_title(
-    "Number of Insured People by Age Group and Smoker Status",
-    fontsize=16,
-    pad=20,
-)
-ax.set_xlabel("Age Group", fontsize=14)
-ax.set_ylabel("Number of Insured People", fontsize=14)
-
-# Customize the legend
-ax.legend(title="Smoker", labels=["Yes", "No"])
-
-plt.tight_layout()
-st.pyplot(fig) # Display the plot in Streamlit
-
+# -------------------------------
+# Dashboard Notes
+# -------------------------------
+st.markdown("""
+### ✅ Dashboard Features
+- Interactive filters for **Age Range** and **Smoker Status**
+- Clear titles, axis labels, and legends
+- Multiple objectives visualized with different plots
+- Clean layout with sidebar navigation
+""")
