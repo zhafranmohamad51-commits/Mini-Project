@@ -5,7 +5,7 @@ import seaborn as sns
 import os
 
 # --------------------------------------------------
-# PAGE CONFIG
+# PAGE CONFIGURATION
 # --------------------------------------------------
 st.set_page_config(
     page_title="Medical Insurance Dashboard",
@@ -39,7 +39,7 @@ df["Age Group"] = pd.cut(
 # --------------------------------------------------
 # SIDEBAR FILTERS
 # --------------------------------------------------
-st.sidebar.header("FILTERS")
+st.sidebar.header("🔍 FILTERS")
 
 gender_filter = st.sidebar.multiselect(
     "Gender",
@@ -59,59 +59,87 @@ filtered_df = df[
 ]
 
 # --------------------------------------------------
-# OBJECTIVE 1
+# KPI CARDS
 # --------------------------------------------------
+total_people = len(filtered_df)
+avg_charges = filtered_df["Charges"].mean()
+total_smokers = len(filtered_df[filtered_df["Smoker"] == "yes"])
+total_non_smokers = len(filtered_df[filtered_df["Smoker"] == "no"])
+
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Total Insured", f"{total_people:,}")
+col2.metric("Average Charges", f"${avg_charges:,.0f}")
+col3.metric("Smokers", total_smokers)
+col4.metric("Non-Smokers", total_non_smokers)
+
+st.markdown("---")
+
+# ==================================================
+# OBJECTIVE 1
+# ==================================================
 st.header(
     "OBJECTIVE 1: TO COMPARE INSURANCE CHARGES BETWEEN SMOKERS AND NON-SMOKERS ACCORDING TO AGE CATEGORY"
 )
 
-fig1, ax1 = plt.subplots(figsize=(10,6))
+charges_by_age_smoker = (
+    filtered_df
+    .groupby(["Age Group", "Smoker"])["Charges"]
+    .mean()
+    .reset_index()
+)
 
-sns.boxplot(
-    data=filtered_df,
+fig1, ax1 = plt.subplots(figsize=(10, 6))
+
+sns.barplot(
+    data=charges_by_age_smoker,
     x="Age Group",
     y="Charges",
     hue="Smoker",
-    palette="Set2",
+    palette={"yes": "red", "no": "blue"},
     ax=ax1
 )
 
 ax1.set_title(
-    "Insurance Charges by Age Group and Smoker Status",
+    "Average Insurance Charges by Age Group and Smoker Status",
     fontsize=14,
     fontweight="bold"
 )
 
 ax1.set_xlabel("Age Category")
-ax1.set_ylabel("Insurance Charges")
+ax1.set_ylabel("Average Insurance Charges")
+
+for container in ax1.containers:
+    ax1.bar_label(container, fmt="%.0f")
 
 st.pyplot(fig1)
 
 st.markdown("---")
 
-# --------------------------------------------------
+# ==================================================
 # OBJECTIVE 2
-# --------------------------------------------------
+# ==================================================
 st.header(
     "OBJECTIVE 2: TO ANALYZE THE RELATIONSHIP BETWEEN INSURANCE CHARGES AND BMI"
 )
 
-col1, col2 = st.columns(2)
+col_left, col_right = st.columns(2)
 
 # Male Scatter Plot
-with col1:
+with col_left:
 
     male_df = filtered_df[
         filtered_df["Sex"].str.lower() == "male"
     ]
 
-    fig2, ax2 = plt.subplots(figsize=(6,5))
+    fig2, ax2 = plt.subplots(figsize=(6, 5))
 
     sns.scatterplot(
         data=male_df,
         x="BMI",
         y="Charges",
         hue="Smoker",
+        palette={"yes": "red", "no": "blue"},
         ax=ax2
     )
 
@@ -120,22 +148,26 @@ with col1:
         fontweight="bold"
     )
 
+    ax2.set_xlabel("BMI")
+    ax2.set_ylabel("Insurance Charges")
+
     st.pyplot(fig2)
 
 # Female Scatter Plot
-with col2:
+with col_right:
 
     female_df = filtered_df[
         filtered_df["Sex"].str.lower() == "female"
     ]
 
-    fig3, ax3 = plt.subplots(figsize=(6,5))
+    fig3, ax3 = plt.subplots(figsize=(6, 5))
 
     sns.scatterplot(
         data=female_df,
         x="BMI",
         y="Charges",
         hue="Smoker",
+        palette={"yes": "red", "no": "blue"},
         ax=ax3
     )
 
@@ -144,18 +176,21 @@ with col2:
         fontweight="bold"
     )
 
+    ax3.set_xlabel("BMI")
+    ax3.set_ylabel("Insurance Charges")
+
     st.pyplot(fig3)
 
 st.markdown("---")
 
-# --------------------------------------------------
+# ==================================================
 # OBJECTIVE 3
-# --------------------------------------------------
+# ==================================================
 st.header(
     "OBJECTIVE 3: TO ANALYZE WHETHER THERE ARE MORE SMOKERS OR NON-SMOKERS IN EACH AGE GROUP OF THE INSURED PEOPLE"
 )
 
-fig4, ax4 = plt.subplots(figsize=(10,6))
+fig4, ax4 = plt.subplots(figsize=(10, 6))
 
 sns.countplot(
     data=filtered_df,
@@ -173,5 +208,8 @@ ax4.set_title(
 
 ax4.set_xlabel("Age Group")
 ax4.set_ylabel("Number of Insured People")
+
+for container in ax4.containers:
+    ax4.bar_label(container)
 
 st.pyplot(fig4)
