@@ -6,7 +6,14 @@ import seaborn as sns
 st.set_page_config(page_title="Medical Insurance Dashboard", layout="wide")
 st.title("🏥 Medical Insurance Cost Analysis Dashboard")
 
-DF = pd.read_csv('clean_data.csv')
+import os
+
+# Get the directory that this current script is in
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(SCRIPT_DIR, 'clean_data.csv')
+
+# Load the dataframe safely
+DF = pd.read_csv(DATA_PATH)
 
 # Define filtered_df (assuming no filtering yet, will be updated later with user input)
 filtered_df = DF.copy()
