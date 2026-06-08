@@ -12,6 +12,74 @@ st.set_page_config(
     layout="wide"
 )
 
+# --------------------------------------------------
+# HEALTHCARE THEME
+# --------------------------------------------------
+st.markdown("""
+<style>
+
+/* Main App Background */
+.stApp {
+    background-color: #F4FAFB;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #0E7490;
+}
+
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* Main Title */
+.main-title {
+    background: linear-gradient(90deg, #0891B2, #06B6D4);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Objective Headers */
+.objective-header {
+    background-color: #E0F7FA;
+    border-left: 8px solid #0891B2;
+    padding: 15px;
+    border-radius: 10px;
+    color: #0F172A;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+/* KPI Cards */
+div[data-testid="metric-container"] {
+    background-color: white;
+    border: 2px solid #CFFAFE;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Plot Containers */
+.stPlotlyChart,
+.element-container {
+    border-radius: 10px;
+}
+
+/* Horizontal Line */
+hr {
+    border: 1px solid #BAE6FD;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
 st.markdown("---")
 
