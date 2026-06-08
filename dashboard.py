@@ -12,75 +12,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# ==================================================
-# HEALTHCARE DASHBOARD THEME
-# ==================================================
-st.markdown("""
-<style>
-
-/* Main Background */
-.stApp {
-    background: linear-gradient(
-        135deg,
-        #e8f5e9 0%,
-        #f1f8ff 50%,
-        #ffffff 100%
-    );
-}
-
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background-color: #e3f2fd;
-}
-
-/* KPI Cards */
-[data-testid="metric-container"] {
-    background-color: white;
-    border: 2px solid #d6eaf8;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Graph Containers */
-[data-testid="stPlotlyChart"],
-[data-testid="stImage"] {
-    background-color: white;
-    border-radius: 10px;
-}
-
-/* Main Title */
-h1 {
-    color: #1565c0;
-    text-align: center;
-    font-weight: bold;
-}
-
-/* Objective Headers */
-h2 {
-    color: #00695c;
-    background-color: rgba(255,255,255,0.7);
-    padding: 10px;
-    border-left: 6px solid #26a69a;
-    border-radius: 5px;
-}
-
-/* Horizontal Line */
-hr {
-    border: 2px solid #b3e5fc;
-}
-
-/* General Text */
-p, label {
-    color: #263238;
-    font-size: 15px;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
 st.title("🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
-st.caption("Interactive Analysis of Insurance Charges, BMI and Smoking Behaviour")
+st.markdown("---")
 
 # --------------------------------------------------
 # LOAD DATA
@@ -106,7 +39,7 @@ df["Age Group"] = pd.cut(
 # --------------------------------------------------
 # SIDEBAR FILTERS
 # --------------------------------------------------
-st.sidebar.header("FILTERS")
+st.sidebar.header("🔍 FILTERS")
 
 gender_filter = st.sidebar.multiselect(
     "Gender",
@@ -280,4 +213,3 @@ for container in ax4.containers:
     ax4.bar_label(container)
 
 st.pyplot(fig4)
-
