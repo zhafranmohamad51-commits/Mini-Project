@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
+st.title("MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
 st.markdown("---")
 
 # --------------------------------------------------
@@ -39,7 +39,7 @@ df["Age Group"] = pd.cut(
 # --------------------------------------------------
 # SIDEBAR FILTERS
 # --------------------------------------------------
-st.sidebar.header("🔍 FILTERS")
+st.sidebar.header("FILTERS")
 
 gender_filter = st.sidebar.multiselect(
     "Gender",
