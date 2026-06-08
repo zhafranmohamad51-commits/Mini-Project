@@ -79,8 +79,8 @@ p, label {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
-st.markdown("---")
+st.title("🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
+st.caption("Interactive Analysis of Insurance Charges, BMI and Smoking Behaviour")
 
 # --------------------------------------------------
 # LOAD DATA
