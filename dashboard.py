@@ -80,8 +80,14 @@ hr {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD")
-st.markdown("---")
+st.markdown(
+    """
+    <div class='main-title'>
+    🏥 MEDICAL INSURANCE COST ANALYSIS DASHBOARD
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # --------------------------------------------------
 # LOAD DATA
@@ -146,9 +152,11 @@ st.markdown("---")
 # ==================================================
 # OBJECTIVE 1
 # ==================================================
-st.header(
-    "OBJECTIVE 1: TO COMPARE INSURANCE CHARGES BETWEEN SMOKERS AND NON-SMOKERS ACCORDING TO AGE CATEGORY"
-)
+st.markdown("""
+<div class='objective-header'>
+OBJECTIVE 1: TO COMPARE INSURANCE CHARGES BETWEEN SMOKERS AND NON-SMOKERS ACCORDING TO AGE CATEGORY
+</div>
+""", unsafe_allow_html=True)
 
 charges_by_age_smoker = (
     filtered_df
