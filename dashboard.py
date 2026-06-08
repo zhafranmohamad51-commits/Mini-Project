@@ -37,76 +37,44 @@ plt.xlabel('Age Groups')
 plt.ylabel('Number of Beneficiaries')
 st.pyplot(fig2)
 
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": []
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "Xk-UylJIIDa6"
-      },
-      "outputs": [],
-      "source": [
-        "import streamlit as st\n",
-        "import pandas as pd\n",
-        "import matplotlib.pyplot as plt\n",
-        "import seaborn as sns\n",
-        "\n",
-        "st.set_page_config(page_title=\"Smoker Status by Age Group\", layout=\"wide\")\n",
-        "st.title(\"🚬 Smoker Status by Age Group Analysis\")\n",
-        "\n",
-        "# Load the data\n",
-        "df_streamlit = pd.read_csv(\"clean_data.csv\")\n",
-        "\n",
-        "# Define age bins and labels\n",
-        "age_bins = [18, 30, 40, 50, 60, 70]\n",
-        "age_labels = [\"18-29\", \"30-39\", \"40-49\", \"50-59\", \"60-69\"]\n",
-        "\n",
-        "# Create 'Age Group' column\n",
-        "df_streamlit[\"Age Group\"] = pd.cut(\n",
-        "    df_streamlit[\"Age\"], bins=age_bins, labels=age_labels, right=False\n",
-        ")\n",
-        "\n",
-        "# Set the style and create the plot\n",
-        "fig, ax = plt.subplots(figsize=(10, 7)) # Create figure and axes for matplotlib\n",
-        "sns.set_theme(style=\"whitegrid\")\n",
-        "\n",
-        "sns.countplot(\n",
-        "    data=df_streamlit,\n",
-        "    x=\"Age Group\",\n",
-        "    hue=\"Smoker\",\n",
-        "    palette={\"yes\": \"red\", \"no\": \"blue\"},\n",
-        "    ax=ax # Pass the axes to seaborn\n",
-        ")\n",
-        "\n",
-        "ax.set_title(\n",
-        "    \"Number of Insured People by Age Group and Smoker Status\",\n",
-        "    fontsize=16,\n",
-        "    pad=20,\n",
-        ")\n",
-        "ax.set_xlabel(\"Age Group\", fontsize=14)\n",
-        "ax.set_ylabel(\"Number of Insured People\", fontsize=14)\n",
-        "\n",
-        "# Customize the legend\n",
-        "ax.legend(title=\"Smoker\", labels=[\"Yes\", \"No\"])\n",
-        "\n",
-        "plt.tight_layout()\n",
-        "st.pyplot(fig) # Display the plot in Streamlit"
-      ]
-    }
-  ]
-}
+st.set_page_config(page_title="Smoker Status by Age Group", layout="wide")
+st.title("🚬 Smoker Status by Age Group Analysis")
+
+# Load the data
+df_streamlit = pd.read_csv("clean_data.csv")
+
+# Define age bins and labels
+age_bins = [18, 30, 40, 50, 60, 70]
+age_labels = ["18-29", "30-39", "40-49", "50-59", "60-69"]
+
+# Create 'Age Group' column
+df_streamlit["Age Group"] = pd.cut(
+    df_streamlit["Age"], bins=age_bins, labels=age_labels, right=False
+)
+
+# Set the style and create the plot
+fig, ax = plt.subplots(figsize=(10, 7)) # Create figure and axes for matplotlib
+sns.set_theme(style="whitegrid")
+
+sns.countplot(
+    data=df_streamlit,
+    x="Age Group",
+    hue="Smoker",
+    palette={"yes": "red", "no": "blue"},
+    ax=ax # Pass the axes to seaborn
+)
+
+ax.set_title(
+    "Number of Insured People by Age Group and Smoker Status",
+    fontsize=16,
+    pad=20,
+)
+ax.set_xlabel("Age Group", fontsize=14)
+ax.set_ylabel("Number of Insured People", fontsize=14)
+
+# Customize the legend
+ax.legend(title="Smoker", labels=["Yes", "No"])
+
+plt.tight_layout()
+st.pyplot(fig) # Display the plot in Streamlit
+
